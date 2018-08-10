@@ -1,73 +1,32 @@
-  
- //validating datatypes of mongoose model
-
-var mongoose = require('mongoose');
-
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/ToDoApp');
-//Todo model 
-var Todo = mongoose.model( 'Todo',{
-	text : {
-		type:String,
-		required:true,
-		minlength:1,
-		trim: true
-	},
-		id:{
-			type:Number,
-			default : null
-		},
-
-		flag:{
-			type: Boolean,
-			default : false
-		}
-		
-	
-});
-
- var newTodo = new Todo({
- 	text:'got'
- });
+var express = require('express');
+var bodyParser = require('body-parser');  
 
 
-  newTodo.save().then((doc)=>{
- 	console.log(doc);
- },(e)=>{
-	console.log('unable to save data');
+var {mongoose} = require('./db/mongoose.js');
+var {Todo} = require('./models/Todo.js');
+var {User} =  require('./models/Users.js');
+
+
+var app =express();
+
+app.use(bodyParser.json());
+
+app.post('/todos',(req,res)=>{
+	var todo = new Todo({
+		text:req.body.text
+	});
+
+	todo.save().then((doc)=>{
+		(res.send(doc);
+	},(err)=>{
+		res.status(200).send(err);
+	})
 });
 
 
-var otherTodo = new Todo({
-	text:'  rohan   '
-});
+app.listen(3000,()=>{
+	console.log('Started on port 3000');
 
-otherTodo.save().then((doc)=>{
-	console.log(doc);
-
-},(e)=>{
-	console.log('unable to save data');
-});
-
-//new model of user created
-var User = mongoose.model('User',{
-	email:{
-		type:String,
-		required:true,
-		minlength:2,
-		trim:true
-	}
-});
-
-var newUser = new User({
-	email:' rohan123@gmail.com '
-});
-
-newUser.save().then((doc)=>{
-
-	console.log(doc);
-},(e)=>{
-	console.log('path email is required');
 });
 
 

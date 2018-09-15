@@ -4,6 +4,16 @@ var bodyParser = require('body-parser');
 var {ObjectId} = require('mongodb');
 var  _ = require('lodash');  
 
+var env = process.env.NODE_ENV|| "development";
+
+if(env === "development"){
+	process.env.PORT =3000;
+	process.env.MONGODB_URI ='mongodb://localhost:27017/ToDoApp';
+}
+else if(env === "test"){
+	process.env.PORT =3000;
+	process.env.MONGODB_URI ='mongodb://localhost:27017/ToDoAppTest';
+}
 
 var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/Todo.js');
@@ -123,6 +133,23 @@ Todo.findByIdAndUpdate(id,{$set:body},{new:true}).then((todo)=>{
 }).catch((e)=>{ res.status(400).send()})
 
 });
+
+
+
+app.post('/users',(req,res)=>{
+	var body = _.pick(req.body,['email','password']);
+	var user = new User({body});
+
+	user.save().then((user)=>{
+		res.send(user);
+
+	}).catch((e)=>{
+		  res.status(400).send(e);
+	})
+
+
+})
+
 
 app.listen(	port,()=>{
 	console.log(`started on port ${port}`);

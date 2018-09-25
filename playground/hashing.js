@@ -1,8 +1,9 @@
 const {SHA256} = require('crypto-js');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 
-
+console.log('JSON WEB TOKEN');
 var data={
 	num:12,
 	flag:false
@@ -14,6 +15,20 @@ var data={
  var result = jwt.verify(init_token,'iiitv_123');
  console.log(result.iat);
 
+console.log('BCRYPT JS');
+
+var pass = "iiitv";
+
+bcrypt.genSalt(10,pass,(err,salt)=>{
+	bcrypt.hash(pass,salt,(err,hash)=>{
+		console.log(hash);
+	})
+});
+
+var passHash ="$2a$10$WYU2GHU/x5nSv2keuzpTkOviYkvJ3qDtnA01fRHOZw7AL/2NYU5K.";
+bcrypt.compare(pass,passHash,(err,res)=>{
+	console.log(res);
+});
 
 
 // var text = "hey there";

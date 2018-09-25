@@ -18,6 +18,7 @@ else if(env === "test"){
 var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/Todo.js');
 var {User} =  require('./models/Users.js');
+var {authenticate} =require('./middleware/authenticate');
 
 
 var app =express();
@@ -154,6 +155,24 @@ app.post('/users',(req,res)=>{
 
 
 });
+
+
+
+app.get('/users/me',authenticate,(req,res)=>{
+
+	res.send(req.user);
+	// var token =req.header('x-auth');
+	// User.findByToken(token).then((user)=>{
+	// 	if(!user){
+	// 		return Promise.reject();
+	// 	}
+	// 	console.log(token);
+	// 	res.send(user);
+	// }).catch((e)=>{
+	// 	res.status(401).send();
+	// })
+
+}); 
 
 /*
 	{

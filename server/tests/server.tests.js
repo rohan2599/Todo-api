@@ -283,4 +283,59 @@ describe('POST /users',(done)=>{
 	});
 
 
+});
+
+
+describe('POST /users/login',(done)=>{
+
+	it('should login the user'(done)=>{
+		request(app)
+		.post('/users/login')
+		.send({
+			email:Users[1].email,
+			password:Users[1].password
+		})
+		.expect(200)
+		.expect((res)=>{
+			expect(res.headers['x-auth']).toExist();
+
+		})
+		.end((err)=>{
+			if(err){
+				return done(err);
+			}
+			User.findById(Users[1]._id).then((user)=>{
+				expect(Users.tokens[0]).toInclude({
+					access:'x-auth',
+					token:res.headers['x-auth']
+				})
+				done();
+			}).catch((e)=>done(e));
+		})
+	});
+
+
+	it('should reject invalid login',(done)=>{
+		request(app)
+		.post('/users/login')
+		.send({
+			email:Users[1].email,
+			password:Users[1].password+'23'
+		})
+		.expect(400)
+		.expect((res)=>{
+			expect(res.headers['x-auth']).toNotExist();
+		})
+		.end((err)=>{
+			if(err){
+				return done(err);
+			}
+
+			Users.findById(Users[1]._id).then((user)=>{
+				expect(Users.tokens.lenght).toBe(0);
+			})
+			done();
+
+		}).catch((e)=>done(e));
+	})
 })

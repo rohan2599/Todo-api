@@ -21,17 +21,25 @@ const Users= [{
 },{
 		_id : UserOneId
 	email:'rohan1235@gmail.com',
-	password :'sdfpw4reosg'
+	password :'sdfpw4reosg',
+	tokens:[
+		{
+			access:'auth',
+			token:jwt.verify({_id:UserTwoId,access:'auth'},'iiitv_123').toString()
+		}
+	]
 
 
-}]
+}];
 
 const todos =[
 {text:"Its show time",
-	_id: new ObjectId()
+	_id: new ObjectId(),
+	_creator:UserOneId
 },
 { text:"Hey everybody",
-_id: new ObjectId()
+_id: new ObjectId(),
+_creator:UserTwoId
 }];
 
 const populateTodos =(done)=>{

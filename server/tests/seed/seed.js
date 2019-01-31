@@ -14,7 +14,7 @@ const Users= [{
 	tokens:[
 		{
 			access:'auth',
-			token:jwt.verify({_id:UserOneId,access:'auth'},'iiitv_123').toString()
+			token:jwt.verify({_id:UserOneId,access:'auth'},process.env.JWT_SECRET).toString()
 		}
 	]
 
@@ -25,7 +25,7 @@ const Users= [{
 	tokens:[
 		{
 			access:'auth',
-			token:jwt.verify({_id:UserTwoId,access:'auth'},'iiitv_123').toString()
+			token:jwt.verify({_id:UserTwoId,access:'auth'},process.env.JWT_SECRET).toString()
 		}
 	]
 
